@@ -1,0 +1,65 @@
+<template>
+    <!-- COMPONENT BODY -->
+    <lightning-card >
+        <template if:true={hasRecordsExists}>
+            <table id="dataTable" class="slds-table slds-table_bordered slds-table_resizable-cols table table-striped" role="grid">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <template if:true={rowSelection} >
+                            <th></th>
+                        </template>
+                        <template for:each={columns} for:item="column">
+                            <th key={column.name} width={column.width}>
+                                <div class="slds-grid slds-grid_vertical-align-center slds-cell-wrap slds-p-around_x-small">
+                                    <span class="slds-truncate">
+                                        <lightning-formatted-rich-text 
+                                            value={column.label}
+                                        ></lightning-formatted-rich-text>
+                                    </span>
+                                </div>
+                            </th>
+                        </template>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={recordsList} for:item="record" for:index="index">
+                        <tr key={record.Id} data-recordid={record.Id} id={record.Id} >
+                            <template if:true={rowSelection} >
+                                <td>
+                                    <lightning-input 
+                                        type="checkbox" 
+                                        variant="label-hidden"
+                                        data-id={record.Id}
+                                        onchange={handleSelectRecord}
+                                    ></lightning-input>
+                                </td>
+                            </template>
+                            <template for:each={columns} for:item="column">
+                                <td key={column.name} class="slds-cell-wrap">
+                                    <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                        <c-datatable-data
+                                            column={column}
+                                            record={record}
+                                        ></c-datatable-data>
+                                    </div>
+                                </td>
+                            </template>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </template>
+        <template if:false={hasRecordsExists}>
+            <div class="slds-p-top_medium" >
+                <div class="slds-scoped-notification slds-media slds-media_center slds-scoped-notification_dark" role="status">
+                    <div class="slds-media__body">
+                        <p>
+                            No records found.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </lightning-card>
+    <!-- COMPONENT BODY -->
+</template>

@@ -1,0 +1,59 @@
+<template>
+    <!-- COMPOENT BODY -->
+    <!-- TEXT -->
+    <template if:true={_isText} >
+        <lightning-formatted-text 
+            value={_recordValue}
+        ></lightning-formatted-text>
+    </template>
+    <!-- TEXT -->
+    <!-- LINK -->
+    <template if:true={_isLink} >
+        <lightning-formatted-url
+            value={_recordId}
+            label={_recordValue}
+            target="_blank"
+        ></lightning-formatted-url>
+    </template>
+    <!-- LINK -->
+    <!-- CURRENCY -->
+    <template if:true={_isCurrency} >
+        <lightning-formatted-number 
+            value={_recordValue}
+            format-style="currency"
+            maximum-fraction-digits="2"
+        ></lightning-formatted-number>
+    </template>
+    <!-- CURRENCY -->
+    <!-- DATE -->
+    <template if:true={_isDate} >
+       <lightning-formatted-date-time
+            value={_recordValue}
+            format-style="currency"
+            year="numeric" 
+            month="2-digit" 
+            day="2-digit"
+        ></lightning-formatted-date-time>
+    </template>
+    <!-- DATE -->
+    <!-- NUMBER -->
+    <template if:true={_isNumber} >
+        <lightning-formatted-number 
+            value={_recordValue}
+            maximum-fraction-digits="2"
+            minimum-fraction-digits="2"
+        ></lightning-formatted-number>
+    </template>
+    <!-- NUMBER -->
+    <!-- PERCENT -->
+    <template if:true={_isPercent} >
+        <lightning-formatted-number 
+            value={_recordValue}
+            format-style="percent"
+            maximum-fraction-digits="2"
+            minimum-fraction-digits="2"
+        ></lightning-formatted-number>
+    </template>
+    <!-- PERCENT -->
+    <!-- COMPOENT BODY -->
+</template>

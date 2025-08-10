@@ -1,0 +1,165 @@
+<template>
+    <!-- SPINNER -->
+    <lightning-spinner
+        alternative-text="Loading..."
+        variant="brand"
+        class="slds-hide"
+    ></lightning-spinner>
+    <!-- SPINNER -->
+    <!-- COMPONENT BODY -->
+    <div class="slds-box slds-m-around_small" >
+        <!-- FIRST PAGE -->
+        <template if:true={firstPage} >
+            <lightning-card title="Select Fee">
+                <lightning-layout multiple-rows="true">
+                    <lightning-layout-item padding="around-small" size="4"></lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="4">
+                        <lightning-combobox
+                            options={_productFeesList}
+                            value={_selectedProductFee}
+                            onchange={handleFeeChange} 
+                            label="Select Fee"
+                        ></lightning-combobox>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="4"></lightning-layout-item>
+                </lightning-layout>
+                <div slot="footer" >
+                    <lightning-button label="Next" onclick={handleNext} variant="brand" class="slds-m-right_x-small"></lightning-button>
+                    <lightning-button label="Cancel" onclick={handleCancel} class="slds-col slds-m-left_x-small"></lightning-button>
+                </div>
+            </lightning-card>
+        </template>
+        <!-- FIRST PAGE -->
+        <!-- SECOND PAGE -->
+        <template if:true={secondPage} >
+            <lightning-card title="Create Parts">
+                <lightning-layout multiple-rows="true">
+                    <lightning-layout-item padding="around-small" size="6">
+                        <lightning-input 
+                            type="text"
+                            data-field="CustomerName__c"
+                            onchange={handleFieldChange}
+                            value={_salesOrder.CustomerName__c}
+                            label="Customer Name"
+                        ></lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="6">
+                        <lightning-input 
+                            type="text"
+                            data-field="AcctSeedERP__Billing_Street__c"
+                            onchange={handleFieldChange}
+                            value={_salesOrder.AcctSeedERP__Billing_Street__c}
+                            label="Billing Street"
+                        ></lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="6">
+                        <lightning-input 
+                            type="text"
+                            data-field="AcctSeedERP__Billing_City__c"
+                            onchange={handleFieldChange}
+                            value={_salesOrder.AcctSeedERP__Billing_City__c}
+                            label="Billing City"
+                        ></lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="6">
+                        <lightning-input 
+                            type="text"
+                            data-field="AcctSeedERP__Billing_State__c"
+                            onchange={handleFieldChange}
+                            value={_salesOrder.AcctSeedERP__Billing_State__c}
+                            label="Billing State"
+                        ></lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="6">
+                        <lightning-input 
+                            type="text"
+                            data-field="AcctSeedERP__Billing_Country__c"
+                            onchange={handleFieldChange}
+                            value={_salesOrder.AcctSeedERP__Billing_Country__c}
+                            label="Billing Country"
+                        ></lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="6">
+                        <lightning-input 
+                            type="text"
+                            data-field="AcctSeedERP__Billing_PostalCode__c"
+                            onchange={handleFieldChange}
+                            value={_salesOrder.AcctSeedERP__Billing_PostalCode__c}
+                            label="Billing Postal Code"
+                        ></lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="6">
+                        <lightning-input 
+                            type="text"
+                            data-field="CounterSalesDetails__c"
+                            onchange={handleFieldChange}
+                            value={_salesOrder.CounterSalesDetails__c}
+                            label="Counter Sales Details"
+                        ></lightning-input>
+                    </lightning-layout-item>
+                </lightning-layout>
+                <div slot="footer" >
+                    <lightning-button label="Next" onclick={handleNext} variant="brand" class="slds-m-right_x-small"></lightning-button>
+                    <lightning-button label="Cancel" onclick={handleCancel} class="slds-col slds-m-left_x-small"></lightning-button>
+                </div>
+            </lightning-card>
+        </template>
+        <!-- SECOND PAGE -->
+        <!-- THIRD PAGE -->
+        <template if:true={thirdPage} >
+            <lightning-card title="Select Products">
+                <c-datatable
+                    columns={_columnsList}
+                    records-list={priceBookEntriesList}
+                    row-selection="true"
+                    onselectedrows={handleSelectedRows}
+                ></c-datatable>
+                <div slot="footer" >
+                    <lightning-button label="Next" onclick={handleNext} variant="brand" class="slds-m-right_x-small"></lightning-button>
+                    <lightning-button label="Cancel" onclick={handleCancel} class="slds-col slds-m-left_x-small"></lightning-button>
+                </div>
+            </lightning-card>
+        </template>
+        <!-- THIRD PAGE -->
+        <!-- FOURTH PAGE -->
+        <template if:true={fourthPage} >
+            <lightning-card title="Enter Details">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered" >
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th >Product Name</th>
+                            <th >Unit Cost</th>
+                            <th >Quantity</th>
+                            <th >Comment</th>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={_selectedSalesOrderLinesList} for:item="salesOrderLine" for:index="index">
+                            <tr key={salesOrderLine.AcctSeedERP__Product__c} >
+                                <td>
+                                    <lightning-formatted-text value={salesOrderLine.Name} ></lightning-formatted-text>
+                                </td>
+                                <td>
+                                    <lightning-input required="true" min="1" message-when-value-missing="Unit Price is required." data-index={index} type="number" value={salesOrderLine.AcctSeedERP__Unit_Price__c} formatter="currency" variant="label-hidden" onchange={handleOnUnitPriceChange} ></lightning-input>
+                                </td>
+                                <td>
+                                    <lightning-input required="true" min="1" message-when-value-missing="Quantity is required." data-index={index} type="number" value={salesOrderLine.AcctSeedERP__Quantity_Ordered__c} variant="label-hidden" onchange={handleOnQuantityChange} ></lightning-input>
+                                </td>
+                                <td>
+                                    <lightning-input data-index={index} type="text" value={salesOrderLine.AcctSeedERP__Comment__c} variant="label-hidden" onchange={handleOnCommentChange}  ></lightning-input>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+                <div slot="footer" >
+                    <lightning-button label="Finish" onclick={handleFinish} variant="brand" class="slds-m-right_x-small"></lightning-button>
+                    <lightning-button label="Create Billing" onclick={handleCreateBilling} class="slds-col slds-m-left_x-small"></lightning-button>
+                </div>
+            </lightning-card>
+        </template>
+        <!-- FOURTH PAGE -->
+    </div>
+    <!-- COMPONENT BODY -->
+</template>

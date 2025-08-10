@@ -1,0 +1,37 @@
+<template>
+    <lightning-card title="Audio Transcription" icon-name="utility:audio">
+        <div class="slds-p-around_medium">
+            <lightning-input
+                type="file"
+                label="Upload Audio File"
+                accept="audio/mpeg, audio/wav, audio/webm, audio/mp3"
+                onchange={handleFileUpload}
+                disabled={isProcessing}
+            ></lightning-input>
+
+            <template if:true={showSpinner}>
+                <lightning-spinner alternative-text="Processing" size="large"></lightning-spinner>
+                <p>Processing audio file... This may take a moment.</p>
+            </template>
+
+            <template if:true={hasError}>
+                <div class="slds-notify slds-notify_alert slds-theme_error slds-m-top_medium">
+                    <span class="slds-assistive-text">Error</span>
+                    <span class="slds-icon_container slds-icon-utility-error">
+                        <lightning-icon icon-name="utility:error" size="small"></lightning-icon>
+                    </span>
+                    <h2>{error}</h2>
+                </div>
+            </template>
+
+            <template if:true={transcription}>
+                <div class="slds-m-top_medium">
+                    <h3 class="slds-text-heading_small">Transcription Result:</h3>
+                    <div class="slds-p-around_small slds-border_left slds-border_right slds-border_top slds-border_bottom">
+                        {transcription}
+                    </div>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

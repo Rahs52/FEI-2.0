@@ -1,0 +1,73 @@
+<template>
+    <!-- SPINNER -->
+    <lightning-spinner
+        alternative-text="Loading..."
+        variant="brand"
+        class="slds-hide"
+    ></lightning-spinner>
+    <!-- SPINNER -->
+    <!-- COMPONENT BODY -->
+    <!-- FIRST PAGE -->
+    <div class="slds-m-around_x-small" >
+        <template if:true={firstPage} >
+            <lightning-card title="Select Type">
+                <div class="slds-box slds-m-around_small" >
+                    <lightning-record-edit-form 
+                        data-id="counterSalesType"
+                        object-api-name="AcctSeedERP__Sales_Order__c" >
+                        <lightning-layout multiple-rows="true">
+                            <lightning-layout-item padding="around-small" size="6">
+                                <lightning-input-field field-name="CounterSalesType__c" onchange={handleCounterSalesTypeChange}  ></lightning-input-field>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </lightning-record-edit-form>
+                </div>
+                <div slot="footer" >
+                    <lightning-button label="Next" onclick={handleNext} variant="brand" class="slds-m-right_x-small"></lightning-button>
+                    <lightning-button label="Cancel" onclick={handleCancel} class="slds-col slds-m-left_x-small"></lightning-button>
+                </div>
+            </lightning-card>
+        </template>
+        <!-- FIRST PAGE -->
+        <!-- SECOND PAGE -->
+        <template if:true={secondPage} >
+            <template if:true={showParts} >
+                <c-create-parts
+                    account-id={recordId}
+                    counter-sales-type={_selectedCounterSalesType}
+                    product-fees-list={_productFeesList}
+                    price-book-entries-list={_priceBookEntriesList}
+                    oncancel={handleCancel}
+                    onpartscreate={handlePartsCreate}
+                ></c-create-parts>
+            </template>
+            <template if:true={showService} >
+                <c-create-service
+                    account-id={recordId}
+                    counter-sales-type={_selectedCounterSalesType}
+                    product-fees-list={_productFeesList}
+                    oncancel={handleCancel}
+                    onservicecreate={handleServiceCreate}
+                ></c-create-service>
+            </template>
+        </template>
+        <!-- SECOND PAGE -->
+        <!-- THIRD PAGE -->
+        <template if:true={thirdPage} >
+            <template if:true={_partsSelected} >
+                <c-create-service
+                    account-id={recordId}
+                    counter-sales-type={_selectedCounterSalesType}
+                    product-fees-list={_productFeesList}
+                    page-number="2"
+                    sales-order-id={_salesOrderId}
+                    selected-product-fee={_selectedProductFee}
+                    oncancel={handleCancel}
+                    onservicecreate={handleServiceCreate}
+                ></c-create-service>
+            </template>
+        </template>
+        <!-- SECOND PAGE -->
+    </div>
+    <!-- COMPONENT BODY -->
+</template>

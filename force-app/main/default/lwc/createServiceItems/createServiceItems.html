@@ -1,0 +1,87 @@
+<template>
+    <!-- SPINNER -->
+    <lightning-spinner
+        alternative-text="Loading..."
+        variant="brand"
+        class="slds-hide"
+    ></lightning-spinner>
+    <!-- SPINNER -->
+    <!-- COMPONENT BODY -->
+    <div class="slds-m-around_x-small" >
+        <!-- FIRST PAGE -->
+        <template if:true={firstPage} >
+            <lightning-card title="Create Service Items">
+                <div class="slds-box slds-m-around_small" >
+                    <lightning-layout multiple-rows="true">
+                        <lightning-layout-item padding="around-small" size="4"></lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="4">
+                            <lightning-combobox
+                                options={_productTypesList}
+                                value={_selectedProductType}
+                                onchange={handleProductTypeChange} 
+                                label="Select Fee"
+                            ></lightning-combobox>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="4"></lightning-layout-item>
+                    </lightning-layout>
+                </div>
+                <div class="slds-p-vertical_x-small">
+                    <template if:true={_selectedProductType} >
+                        <c-datatable
+                            columns={_columnsList}
+                            records-list={_filteredProductsList}
+                            row-selection="true"
+                            onselectedrows={handleSelectedRows}
+                        ></c-datatable>
+                    </template>
+                </div>
+                <div slot="footer" >
+                    <lightning-button label="Next" onclick={handleNext} variant="brand" class="slds-m-right_x-small"></lightning-button>
+                    <lightning-button label="Cancel" onclick={handleCancel} class="slds-col slds-m-left_x-small"></lightning-button>
+                </div>
+            </lightning-card>
+        </template>
+        <!-- FIRST PAGE -->
+        <!-- SECOND PAGE -->
+        <template if:true={secondPage} >
+            <lightning-card title="Enter Details">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered" >
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th >Product Name</th>
+                            <th >Unit Cost</th>
+                            <th >Quantity</th>
+                            <th >Comment</th>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={_serviceItemLinesList} for:item="serviceItemLine" for:index="index">
+                            <tr key={serviceItemLine.AcctSeedERP__Product__c} >
+                                <td>
+                                    <lightning-formatted-text value={serviceItemLine.Name} ></lightning-formatted-text>
+                                </td>
+                                <td>
+                                    <lightning-input required="true" min="1" message-when-value-missing="Unit Price is required." data-index={index} type="number" value={serviceItemLine.UnitPrice__c} formatter="currency" variant="label-hidden" onchange={handleOnUnitPriceChange} ></lightning-input>
+                                </td>
+                                <td>
+                                    <lightning-input required="true" min="1" message-when-value-missing="Quantity is required." data-index={index} type="number" value={serviceItemLine.Quantity__c} variant="label-hidden" onchange={handleOnQuantityChange} ></lightning-input>
+                                </td>
+                                <td>
+                                    <lightning-input data-index={index} type="text" max-length="255" value={serviceItemLine.Notes__c} variant="label-hidden" onchange={handleOnCommentChange}  ></lightning-input>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+                <div slot="footer" >
+                    <lightning-button label="Save" onclick={handleSave} variant="brand" class="slds-m-right_x-small"></lightning-button>
+                    <lightning-button label="Cancel" onclick={handleCancel} class="slds-col slds-m-left_x-small"></lightning-button>
+                </div>
+            </lightning-card>
+        </template>
+        <!-- SECOND PAGE -->
+    </div>
+    <!-- FIRST PAGE -->
+    <!-- COMPONENT BODY -->
+</template>
